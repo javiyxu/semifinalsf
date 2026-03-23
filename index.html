@@ -3,243 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScheduleHub — Corporate Meeting Manager</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>ScheduleHub — Agendas Manager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; }
+        #app { display: flex; height: 100vh; }
+        aside { width: 300px; padding: 20px; background: #f5f5f5; }
+        main { flex: 1; padding: 20px; overflow-y: auto; }
+        input, select { width: 100%; margin-bottom: 10px; padding: 8px; }
+        button { padding: 8px 12px; margin-right: 5px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        a { color: blue; cursor: pointer; margin-right: 5px; }
+    </style>
 </head>
 <body>
-
-    <!-- ── TOPBAR ── -->
-    <header id="topbar">
-        <div id="topbar-left">
-            <div id="logo">
-                <i class="fas fa-calendar-check"></i>
-                <span>Schedule<strong>Hub</strong></span>
-            </div>
-        </div>
-    
-    </header>
-
     <div id="app">
+        <!-- Sidebar / Form -->
+        <aside>
+            <h2>Agendas</h2>
+            <label>Agenda Title</label>
+            <input type="text" id="agenda_title" placeholder="e.g. Review Q2 KPIs">
 
-        <!-- ── SIDEBAR ── -->
-        <aside id="sidebar">
-            <p class="sidebar-label">Navigation</p>
-            <button class="tab-btn active" data-tab="meetings">
-                <i class="fas fa-video"></i> Meetings
-            </button>
-            <button class="tab-btn" data-tab="zoom_sessions">
-                <i class="fas fa-laptop"></i> Zoom Sessions
-            </button>
-            <button class="tab-btn" data-tab="study_sessions">
-                <i class="fas fa-book-open"></i> Study Sessions
-            </button>
-            <button class="tab-btn" data-tab="participants">
-                <i class="fas fa-users"></i> Participants
-            </button>
-            <button class="tab-btn" data-tab="agendas">
-                <i class="fas fa-list-check"></i> Agendas
-            </button>
+            <label>Assigned To</label>
+            <input type="text" id="assigned_to" placeholder="e.g. Team Lead">
 
-            <div class="sidebar-divider"></div>
-            <p class="sidebar-label">Form</p>
+            <label>Priority</label>
+            <select id="priority">
+                <option value="Critical">Critical</option>
+                <option value="High">High</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Low">Low</option>
+            </select>
 
-            <!-- ── MEETINGS FORM ── -->
-            <div class="form-panel active-form" data-form="meetings">
-                <label>Meeting Title</label>
-                <input type="text" id="meeting_title" placeholder="e.g. Weekly Sync">
+            <label>Status</label>
+            <select id="status">
+                <option value="Pending" selected>Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+                <option value="Deferred">Deferred</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
 
-                <label>Host</label>
-                <input type="text" id="host" placeholder="e.g. Maria Santos">
+            <label>Due Date</label>
+            <input type="date" id="due_date">
 
-                <label>Department</label>
-                <input type="text" id="department" placeholder="e.g. Engineering">
+            <input type="hidden" id="ID">
 
-                <label>Meeting Type</label>
-                <select id="meeting_type">
-                    <option value="Weekly Sync">Weekly Sync</option>
-                    <option value="Sprint Review">Sprint Review</option>
-                    <option value="Stand-up">Stand-up</option>
-                    <option value="Town Hall">Town Hall</option>
-                    <option value="One-on-One">One-on-One</option>
-                    <option value="Retrospective">Retrospective</option>
-                    <option value="Planning">Planning</option>
-                    <option value="Other">Other</option>
-                </select>
-
-                <label>Scheduled Date</label>
-                <input type="datetime-local" id="scheduled_date">
-
-                <input type="hidden" id="ID">
-                <div class="btn-group">
-                    <button id="add"><i class="fas fa-plus"></i> Add</button>
-                    <button id="update"><i class="fas fa-pen"></i> Update</button>
-                </div>
+            <div>
+                <button id="add"><i class="fas fa-plus"></i> Add</button>
+                <button id="update" style="display:none;"><i class="fas fa-pen"></i> Update</button>
             </div>
-
-            <!-- ── ZOOM SESSIONS FORM ── -->
-            <div class="form-panel" data-form="zoom_sessions">
-                <label>Session Title</label>
-                <input type="text" id="session_title" placeholder="e.g. Team Onboarding">
-
-                <label>Organizer</label>
-                <input type="text" id="organizer" placeholder="e.g. John Reyes">
-
-                <label>Meeting Link</label>
-                <input type="url" id="zoom_link" placeholder="https://zoom.us/j/...">
-
-                <label>Platform</label>
-                <select id="platform">
-                    <option value="Zoom">Zoom</option>
-                    <option value="Google Meet">Google Meet</option>
-                    <option value="MS Teams">MS Teams</option>
-                    <option value="Webex">Webex</option>
-                    <option value="Slack Huddle">Slack Huddle</option>
-                    <option value="Other">Other</option>
-                </select>
-
-                <label>Session Date</label>
-                <input type="datetime-local" id="session_date">
-
-                <input type="hidden" class="hidden-id">
-                <div class="btn-group">
-                    <button class="btn-add"><i class="fas fa-plus"></i> Add</button>
-                    <button class="btn-update"><i class="fas fa-pen"></i> Update</button>
-                </div>
-            </div>
-
-            <!-- ── STUDY SESSIONS FORM ── -->
-            <div class="form-panel" data-form="study_sessions">
-                <label>Subject</label>
-                <input type="text" id="subject" placeholder="e.g. Computer Networks">
-
-                <label>Facilitator</label>
-                <input type="text" id="facilitator" placeholder="e.g. Prof. Cruz">
-
-                <label>Topic</label>
-                <input type="text" id="topic" placeholder="e.g. OSI Model">
-
-                <label>Study Mode</label>
-                <select id="study_mode">
-                    <option value="Online">Online</option>
-                    <option value="In-Person">In-Person</option>
-                    <option value="Hybrid">Hybrid</option>
-                    <option value="Self-paced">Self-paced</option>
-                    <option value="Workshop">Workshop</option>
-                </select>
-
-                <label>Session Date</label>
-                <input type="datetime-local" id="study_date">
-
-                <input type="hidden" class="hidden-id">
-                <div class="btn-group">
-                    <button class="btn-add"><i class="fas fa-plus"></i> Add</button>
-                    <button class="btn-update"><i class="fas fa-pen"></i> Update</button>
-                </div>
-            </div>
-
-            <!-- ── PARTICIPANTS FORM ── -->
-            <div class="form-panel" data-form="participants">
-                <label>Full Name</label>
-                <input type="text" id="full_name" placeholder="e.g. Ana dela Cruz">
-
-                <label>Email</label>
-                <input type="email" id="email" placeholder="ana@company.com">
-
-                <label>Role</label>
-                <select id="role">
-                    <option value="Manager">Manager</option>
-                    <option value="Developer">Developer</option>
-                    <option value="Designer">Designer</option>
-                    <option value="QA">QA</option>
-                    <option value="Intern">Intern</option>
-                    <option value="Team Lead">Team Lead</option>
-                    <option value="Product Owner">Product Owner</option>
-                    <option value="Scrum Master">Scrum Master</option>
-                    <option value="Other">Other</option>
-                </select>
-
-                <label>Team</label>
-                <input type="text" id="team" placeholder="e.g. Alpha Squad">
-
-                <label>Joined Date</label>
-                <input type="date" id="joined_date">
-
-                <input type="hidden" class="hidden-id">
-                <div class="btn-group">
-                    <button class="btn-add"><i class="fas fa-plus"></i> Add</button>
-                    <button class="btn-update"><i class="fas fa-pen"></i> Update</button>
-                </div>
-            </div>
-
-            <!-- ── AGENDAS FORM ── -->
-            <div class="form-panel" data-form="agendas">
-                <label>Agenda Title</label>
-                <input type="text" id="agenda_title" placeholder="e.g. Review Q2 KPIs">
-
-                <label>Assigned To</label>
-                <input type="text" id="assigned_to" placeholder="e.g. Team Lead">
-
-                <label>Priority</label>
-                <select id="priority">
-                    <option value="Critical">Critical</option>
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                </select>
-
-                <label>Status</label>
-                <select id="status">
-                    <option value="Pending">Pending</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Done">Done</option>
-                    <option value="Deferred">Deferred</option>
-                    <option value="Cancelled">Cancelled</option>
-                </select>
-
-                <label>Due Date</label>
-                <input type="date" id="due_date">
-
-                <input type="hidden" class="hidden-id">
-                <div class="btn-group">
-                    <button class="btn-add"><i class="fas fa-plus"></i> Add</button>
-                    <button class="btn-update"><i class="fas fa-pen"></i> Update</button>
-                </div>
-            </div>
-
         </aside>
 
-        <!-- ── MAIN CONTENT ── -->
-        <main id="main">
-            <div id="page-header">
-                <div>
-                    <p id="page-breadcrumb"><i class="fas fa-house"></i> Dashboard / <span id="active-tab-name">Meetings</span></p>
-                    <h1 id="page-title">Meetings</h1>
-                </div>
-            </div>
-
-            <div id="table-wrapper">
-                <table id="content">
-                    <thead id="tableHead"></thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
-            </div>
+        <!-- Main / Table -->
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Assigned To</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Due Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
         </main>
-
     </div>
 
-    <script>
-        // Live clock in topbar
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('topbar-date').textContent =
-                now.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' }) +
-                ' ' + now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
-        }
-        updateClock();
-        setInterval(updateClock, 1000);
-    </script>
-    <script src="script.js"></script>
+    <script src="agenda.js"></script>
 </body>
 </html>
