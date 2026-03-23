@@ -1,11 +1,12 @@
-const BASE = "https://spectacular-capybara-bd0aa0.netlify.app/";
+const BASE = "http://localhost:3000/api"; // <-- change to your backend URL
 
 // DOM elements
 const submit = document.querySelector("#add");
 const update = document.querySelector("#update");
 const content = document.querySelector("#tableBody");
 
-window.addEventListener('load', () => getAgendas());
+// Load agendas on page load
+window.addEventListener('load', getAgendas);
 
 // ADD agenda
 submit.addEventListener('click', () => {
@@ -21,7 +22,11 @@ submit.addEventListener('click', () => {
         body: JSON.stringify({ agenda_title, assigned_to, priority, status, due_date })
     })
     .then(res => res.json())
-    .then(() => { alert("Agenda Added"); clearForm(); getAgendas(); })
+    .then(() => { 
+        alert("Agenda Added"); 
+        clearForm(); 
+        getAgendas(); 
+    })
     .catch(err => console.log(err));
 });
 
@@ -39,8 +44,8 @@ function getAgendas() {
                 <td>${a.status}</td>
                 <td>${a.due_date}</td>
                 <td>
-                    <a href="javascript:void(0)" onclick="editAgenda(${a.id})">Edit</a>
-                    <a href="javascript:void(0)" onclick="deleteAgenda(${a.id})">Delete</a>
+                    <a onclick="editAgenda(${a.id})">Edit</a>
+                    <a onclick="deleteAgenda(${a.id})">Delete</a>
                 </td>
             </tr>
         `).join('');
@@ -80,16 +85,26 @@ update.addEventListener('click', () => {
         body: JSON.stringify({ agenda_title, assigned_to, priority, status, due_date })
     })
     .then(res => res.json())
-    .then(() => { alert("Agenda Updated"); clearForm(); getAgendas(); submit.style.display='inline-block'; update.style.display='none'; })
+    .then(() => {
+        alert("Agenda Updated");
+        clearForm();
+        getAgendas();
+        submit.style.display='inline-block';
+        update.style.display='none';
+    })
     .catch(err => console.log(err));
 });
 
 // DELETE agenda
 function deleteAgenda(id) {
-    if (!confirm("Are you sure?")) return;
+    if(!confirm("Are you sure you want to delete this agenda?")) return;
+
     fetch(`${BASE}/agendas/${id}`, { method: 'DELETE' })
     .then(res => res.json())
-    .then(() => { alert("Agenda Deleted"); getAgendas(); })
+    .then(() => { 
+        alert("Agenda Deleted"); 
+        getAgendas(); 
+    })
     .catch(err => console.log(err));
 }
 
