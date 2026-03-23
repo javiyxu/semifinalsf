@@ -1,10 +1,9 @@
-
-const BASE = "https://semifinalsb.onrender.com";
+const BASE = "https://semifinalsb.onrender.com; 
 
 const submit = document.querySelector("#add");
 const update = document.querySelector("#update");
 const content = document.querySelector("#tableBody");
-const hiddenId = document.querySelector("#ID") || document.querySelector(".hidden-id");
+const hiddenId = document.querySelector("#ID");
 
 // Load agendas on page load
 window.addEventListener('load', getAgendas);
@@ -45,8 +44,8 @@ function getAgendas() {
                 <td>${a.status}</td>
                 <td>${a.due_date}</td>
                 <td>
-                    <a href="javascript:void(0)" onclick="editAgenda(${a.id})">Edit</a>
-                    <a href="javascript:void(0)" onclick="deleteAgenda(${a.id})">Delete</a>
+                    <a onclick="editAgenda(${a.id})">Edit</a>
+                    <a onclick="deleteAgenda(${a.id})">Delete</a>
                 </td>
             </tr>
         `).join('');
@@ -64,7 +63,7 @@ function editAgenda(id) {
         document.querySelector("#priority").value     = a.priority;
         document.querySelector("#status").value       = a.status;
         document.querySelector("#due_date").value     = a.due_date;
-        if (hiddenId) hiddenId.value = a.id;
+        hiddenId.value = a.id;
 
         submit.style.display = 'none';
         update.style.display = 'inline-block';
@@ -119,5 +118,5 @@ function clearForm() {
     document.querySelector("#priority").value     = 'Medium';
     document.querySelector("#status").value       = 'Pending';
     document.querySelector("#due_date").value     = '';
-    if (hiddenId) hiddenId.value = '';
+    hiddenId.value = '';
 }
